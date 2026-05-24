@@ -2,313 +2,316 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haripur Panchayat - Official EVM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Haripur Panchayat - Official Digital Ballot System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@500;700&family=Orbitron:wght@700&family=Rozha+One&family=Federo&display=swap" rel="stylesheet">
+    
     <style>
-        /* 1. CORE & BACKGROUND */
-        * { box-sizing: border-box; font-family: 'Arial', sans-serif; user-select: none; }
-        body { background-color: #95a5a6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        /* 1. MANAGEMENT CONSULTING & GOVT DESIGN SYSTEM */
+        :root {
+            --slate-bg: #4a5568;
+            --ballot-paper: #fcfbf7;
+            --ink-black: #1a1a1a;
+            --evm-casing: #cbd5e1;
+            --led-green: #22c55e;
+            --led-red: #ef4444;
+            --button-blue: linear-gradient(180deg, #1e40af, #1d4ed8);
+            --shadow-complex: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background: #2d3748; min-height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Hind', sans-serif; padding: 15px; }
+
+        /* 2. GLASSMORPHISM SECURE AUTHPAD */
+        #loginScreen { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.6); }
+        .secure-card { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 45px 35px; width: 92%; max-width: 420px; text-align: center; box-shadow: var(--shadow-complex); }
+        .secure-card h2 { color: #ffffff; font-family: 'Hind'; font-size: 30px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .secure-card p { color: #94a3b8; font-size: 15px; margin-bottom: 30px; }
         
-        /* 2. SCREENS */
-        .screen { display: none; width: 100%; max-width: 800px; }
-        .screen.active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 3. LOGIN INTERFACE (SECURE LOOK) */
-        .login-box { background: #ffffff; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border-top: 8px solid #1f4e78; width: 100%; max-width: 450px; }
-        .login-title { color: #1f4e78; font-size: 28px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; }
-        .login-subtitle { color: #555; font-size: 18px; font-weight: bold; margin-bottom: 25px; }
-        .id-input { width: 100%; font-size: 45px; text-align: center; padding: 15px; border: 4px solid #bdc3c7; border-radius: 8px; margin-bottom: 25px; letter-spacing: 15px; font-weight: bold; background: #f8f9fa; color: #2c3e50; }
-        .id-input:focus { outline: none; border-color: #1f4e78; background: #fff; }
-        .btn-unlock { background: #1f4e78; color: white; border: none; padding: 18px; font-size: 22px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 6px #0f2d4a; transition: all 0.1s; }
-        .btn-unlock:active { transform: translateY(4px); box-shadow: 0 2px #0f2d4a; }
-        .error-msg { color: #c0392b; font-weight: bold; margin-top: 20px; font-size: 18px; min-height: 25px; }
-
-        /* 4. EVM SYSTEM LAYOUT */
-        .evm-container { display: flex; flex-direction: row; gap: 40px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
-
-        /* 5. VVPAT MACHINE (PRINTER) */
-        .vvpat-unit { width: 260px; height: 320px; background: #dcdde1; border: 4px solid #718093; border-radius: 10px 10px 0 0; box-shadow: 0 15px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; position: relative; }
-        .vvpat-header { background: #2f3640; color: white; width: 100%; text-align: center; padding: 10px; font-weight: bold; border-radius: 5px 5px 0 0; letter-spacing: 2px; }
-        .vvpat-window { width: 220px; height: 180px; background: #111; border: 8px solid #353b48; margin-top: 20px; position: relative; overflow: hidden; box-shadow: inset 0 0 30px rgba(0,0,0,0.9); }
-        .vvpat-glass { width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%); position: absolute; z-index: 10; border: 1px solid #555; }
+        .input-structure { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 2px solid #38bdf8; border-radius: 14px; overflow: hidden; margin-bottom: 25px; position: relative; box-shadow: inset 0 2px 8px rgba(0,0,0,0.5); }
+        .prefix-zone { background: #38bdf8; color: #0f172a; padding: 18px 24px; font-weight: 900; font-size: 24px; font-family: 'Orbitron'; }
+        .main-field { flex: 1; background: transparent; border: none; color: #38bdf8; font-size: 32px; text-align: center; font-weight: bold; letter-spacing: 10px; outline: none; padding: 15px 5px; font-family: 'Orbitron'; }
         
-        /* The Paper Slip */
-        .vvpat-slip { width: 160px; height: 140px; background: #fdfbf7; position: absolute; left: 22px; top: -160px; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #ccc; box-shadow: 2px 2px 10px rgba(0,0,0,0.5); padding: 5px; }
-        .vvpat-slip h3 { margin: 0 0 5px 0; font-size: 24px; font-weight: 900; color: #000; }
-        .vvpat-slip svg { width: 65px; height: 65px; margin-bottom: 5px; }
-        .vvpat-slip .slip-footer { font-size: 11px; color: #333; font-weight: bold; border-top: 1px dashed #777; padding-top: 3px; width: 100%; text-align: center; }
+        .scan-bar { position: absolute; top: 0; left: 0; height: 100%; width: 4px; background: #fff; box-shadow: 0 0 20px #38bdf8, 0 0 10px #fff; opacity: 0; z-index: 5; }
+        .scan-active { animation: activeScan 1.2s ease-in-out infinite alternate; opacity: 1; }
+        @keyframes activeScan { 0% { left: 0; } 100% { left: 100%; } }
 
-        /* 6. BALLOT UNIT (MAIN EVM) */
-        .ballot-unit { width: 480px; background: #ced6e0; border: 6px solid #576574; border-radius: 12px; display: flex; box-shadow: 0 20px 40px rgba(0,0,0,0.5); padding: 15px; position: relative; }
-        .ready-light { position: absolute; top: -15px; right: -15px; width: 35px; height: 35px; background: #1e5c20; border-radius: 50%; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5); border: 4px solid #fff; z-index: 20; transition: 0.3s; }
-        .ready-light.glow { background: #2ecc71; box-shadow: 0 0 25px #2ecc71, inset -2px -2px 5px rgba(0,0,0,0.3); }
+        .btn-auth { width: 100%; padding: 18px; background: #38bdf8; color: #0f172a; font-size: 22px; font-weight: 700; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.1s, background 0.2s; box-shadow: 0 4px 14px rgba(56,189,248,0.3); }
+        .btn-auth:active { transform: scale(0.97); }
+        .error-zone { color: #f87171; font-weight: 700; margin-top: 20px; font-size: 17px; min-height: 26px; text-shadow: 0 0 8px rgba(239,68,68,0.4); }
 
-        /* Left Side: Paper Display */
-        .ballot-paper { width: 70%; background: #ffffff; border: 3px solid #2f3640; border-radius: 4px; display: flex; flex-direction: column; }
-        .candidate-row { display: flex; border-bottom: 3px solid #2f3640; height: 95px; align-items: center; }
-        .candidate-row:last-child { border-bottom: none; }
-        .sno { width: 15%; text-align: center; font-size: 28px; font-weight: 900; border-right: 3px solid #2f3640; height: 100%; display: flex; align-items: center; justify-content: center; background: #ecf0f1; color: #2c3e50; }
-        .cand-info { width: 55%; padding-left: 15px; border-right: 3px solid #2f3640; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .cand-info span:first-child { font-size: 26px; font-weight: 900; color: #000; letter-spacing: 1px; }
-        .cand-info span:last-child { font-size: 13px; color: #555; font-weight: bold; margin-top: 4px; text-transform: uppercase; }
-        .cand-symbol-box { width: 30%; display: flex; justify-content: center; align-items: center; height: 100%; padding: 5px; }
-        .cand-symbol-box svg { width: 100%; height: 100%; max-width: 65px; max-height: 65px; }
+        /* 3. HARDWARE CORE LAYOUT */
+        #evmSystem { display: none; width: 100%; max-width: 520px; flex-direction: column; gap: 24px; animation: unitLaunch 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes unitLaunch { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Right Side: Buttons & Lamps */
-        .control-panel { width: 30%; background: #ced6e0; display: flex; flex-direction: column; align-items: center; }
-        .control-row { height: 95px; display: flex; width: 100%; align-items: center; justify-content: center; gap: 15px; }
-        .lamp { width: 24px; height: 24px; background: #4a0000; border-radius: 50%; border: 3px solid #2f3640; box-shadow: inset 3px 3px 6px rgba(0,0,0,0.8); }
-        .lamp.active { background: #ff0000; box-shadow: 0 0 25px #ff0000, inset -2px -2px 5px rgba(0,0,0,0.3); }
-        .vote-btn { width: 65px; height: 45px; background: #00509e; border-radius: 30px; border: 3px solid #001a33; cursor: pointer; box-shadow: 0 7px 0 #002b5e; position: relative; transition: all 0.1s; }
-        .vote-btn:active { top: 7px; box-shadow: none; background: #003d7a; }
+        /* LCD STATUS MONITOR */
+        .lcd-monitor { background: #000; border: 4px solid #475569; border-radius: 10px; padding: 12px; text-align: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.9); }
+        .lcd-matrix { font-family: 'Orbitron', sans-serif; color: var(--led-green); font-size: 15px; letter-spacing: 2px; text-shadow: 0 0 10px var(--led-green); white-space: nowrap; overflow: hidden; }
+        .lcd-matrix span { display: inline-block; animation: scrollText 12s linear infinite; }
+        @keyframes scrollText { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* SVG Colors (Black & White like real print) */
-        .svg-icon { fill: none; stroke: #000; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+        /* 4. VVPAT AUDIT CABINET */
+        .vvpat-cabinet { background: #334155; border-radius: 16px; padding: 20px; box-shadow: var(--shadow-complex); display: flex; flex-direction: column; align-items: center; border: 3px solid #64748b; }
+        .vvpat-window { width: 200px; height: 170px; background: #050505; border: 8px solid #1e293b; border-radius: 6px; position: relative; overflow: hidden; box-shadow: inset 0 0 35px rgba(0,0,0,1); }
+        .vvpat-shatter { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%); z-index: 10; }
+        
+        /* 3D Scroll Sheet Mech */
+        .ballot-slip { width: 155px; background: var(--ballot-paper); position: absolute; left: 14px; top: -170px; z-index: 5; display: flex; flex-direction: column; align-items: center; padding: 12px 8px; border: 1px solid #b2bec3; box-shadow: 0 8px 20px rgba(0,0,0,0.7); transform-origin: top; }
+        .slip-scroll { animation: scrollMech 1.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .slip-sever { animation: severMech 0.7s ease-in forwards; }
+        
+        @keyframes scrollMech { 0% { top: -170px; transform: rotateX(-45deg); } 100% { top: 8px; transform: rotateX(0deg); } }
+        @keyframes severMech { 0% { top: 8px; opacity: 1; } 100% { top: 220px; opacity: 0; transform: translateY(20px); } }
+
+        .ballot-slip h4 { font-family: 'Rozha One', serif; font-size: 22px; color: var(--ink-black); margin-bottom: 4px; border-bottom: 1px solid #ccc; width: 100%; text-align: center; padding-bottom: 2px; }
+        .ballot-slip .svg-wrap { width: 65px; height: 65px; margin: 5px 0; }
+
+        /* 5. BALLOT UNIT CHASSIS */
+        .ballot-chassis { background: var(--evm-casing); border-radius: 20px; padding: 18px; border: 5px solid #64748b; box-shadow: var(--shadow-complex); position: relative; }
+        
+        /* Power Status Matrix */
+        .power-bulb { position: absolute; top: -12px; right: 25px; width: 28px; height: 28px; background: #14532d; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 10; }
+        .power-active { background: var(--led-green); box-shadow: 0 0 25px var(--led-green), inset -2px -2px 6px rgba(0,0,0,0.4); animation: pulseGlow 2s infinite; }
+        @keyframes pulseGlow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        /* TEXTURED GOVERNMENT BALLOT PAPER */
+        .ballot-sheet { 
+            width: 100%; background: var(--ballot-paper); border: 3px solid var(--ink-black); border-radius: 6px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0); background-size: 4px 4px; /* Matte fiber texture simulation */
+        }
+        
+        .ballot-stripe { display: flex; height: 105px; border-bottom: 3px solid var(--ink-black); align-items: center; position: relative; }
+        .ballot-stripe:last-child { border-bottom: none; }
+
+        .stripe-idx { width: 12%; display: flex; justify-content: center; align-items: center; font-size: 28px; font-family: 'Federo', sans-serif; font-weight: bold; border-right: 3px solid var(--ink-black); height: 100%; background: #f1f2f6; color: var(--ink-black); }
+        .meta-container { width: 50%; padding: 0 18px; display: flex; flex-direction: column; justify-content: center; border-right: 3px solid var(--ink-black); height: 100%; }
+        .meta-container .candidate-title { font-family: 'Rozha One', serif; font-size: 28px; color: var(--ink-black); line-height: 1.1; }
+        .meta-container .symbol-title { font-size: 13px; color: #4b5563; font-weight: 700; margin-top: 3px; letter-spacing: 0.5px; }
+        
+        /* Monochromatic Hand-Drawn Icon Layout */
+        .drawn-symbol { width: 20%; display: flex; justify-content: center; align-items: center; border-right: 3px solid var(--ink-black); height: 100%; padding: 8px; background: #fff; }
+        .drawn-symbol svg { width: 100%; max-width: 65px; height: auto; }
+        
+        .interact-zone { width: 18%; display: flex; justify-content: center; align-items: center; background: var(--evm-casing); gap: 10px; height: 100%; }
+        
+        /* Red Voter LED */
+        .voter-bulb { width: 20px; height: 20px; background: #7f1d1d; border-radius: 50%; border: 2px solid var(--ink-black); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.7); }
+        .voter-bulb.trigger { background: var(--led-red); box-shadow: 0 0 25px var(--led-red), inset -2px -2px 5px rgba(0,0,0,0.4); }
+
+        /* Heavy Duty Actuator Button */
+        .actuator-btn { width: 48px; height: 38px; background: var(--button-blue); border-radius: 8px; border: 2px solid #0f172a; cursor: pointer; box-shadow: 0 6px 0 #0f172a, 0 8px 12px rgba(0,0,0,0.3); transition: all 0.05s linear; }
+        .actuator-btn:active, .actuator-btn.pressed { transform: translateY(6px); box-shadow: 0 0 0 #0f172a, 0 2px 4px rgba(0,0,0,0.4); background: #1e3a8a; }
+
+        /* 6. MODAL SYSTEM */
+        #terminationModal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        .check-matrix { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--led-green); display: flex; justify-content: center; align-items: center; margin-bottom: 25px; animation: sealPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .check-matrix i { color: var(--led-green); font-size: 45px; }
+        @keyframes sealPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        .term-heading { color: #ffffff; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
 
-    <div id="loginScreen" class="screen active">
-        <div class="login-box">
-            <div class="login-title">हरिपुर पंचायत चुनाव</div>
-            <div class="login-subtitle">EVM कंट्रोल यूनिट लॉक है</div>
-            <input type="password" id="voterIdInput" class="id-input" maxlength="3" inputmode="numeric" placeholder="***">
-            <button class="btn-unlock" onclick="authenticateVoter()">EVM अनलॉक करें</button>
-            <div id="loginError" class="error-msg"></div>
+    <div id="loginScreen">
+        <div class="secure-card">
+            <h2>हरिपुर पंचायत चुनाव</h2>
+            <p>EVM Control Unit Protection System</p>
+            <div class="input-structure">
+                <div class="scan-bar" id="laserLine"></div>
+                <div class="prefix-zone">HP -</div>
+                <input type="tel" id="voterNumField" class="main-field" maxlength="4" placeholder="XXXX" autocomplete="off">
+            </div>
+            <button class="btn-auth" onclick="fireAuthentication()">अनलॉक करें</button>
+            <div id="authError" class="error-zone"></div>
         </div>
     </div>
 
-    <div id="evmSystem" class="screen">
-        <div class="evm-container">
-            
-            <div class="vvpat-unit">
-                <div class="vvpat-header">VVPAT SYSTEM</div>
-                <div class="vvpat-window">
-                    <div class="vvpat-glass"></div>
-                    <div class="vvpat-slip" id="vvpatSlip">
-                        <h3 id="slipName">Candidate</h3>
-                        <div id="slipIconBox"></div>
-                        <div class="slip-footer">HARIPUR ELECTION 24</div>
-                    </div>
-                </div>
-            </div>
+    <div id="evmSystem">
+        
+        <div class="lcd-monitor">
+            <div class="lcd-matrix"><span id="lcdConsole">SYSTEM INITIALIZING... READY FOR VERIFIED BALLOT OPERATION...</span></div>
+        </div>
 
-            <div class="ballot-unit">
-                <div class="ready-light" id="evmReadyLight"></div>
-                
-                <div class="ballot-paper">
-                    <div class="candidate-row">
-                        <div class="sno">1</div>
-                        <div class="cand-info"><span>परी</span><span>जग (Ghada)</span></div>
-                        <div class="cand-symbol-box" id="icon1">
-                            <svg viewBox="0 0 100 100" class="svg-icon">
-                                <ellipse cx="50" cy="25" rx="15" ry="8" stroke-width="4" />
-                                <path d="M35 25 C20 50, 20 85, 35 90 L65 90 C80 85, 80 50, 65 25" stroke-width="4" />
-                                <path d="M65 40 C85 30, 95 50, 75 65" stroke-width="4" />
-                                <line x1="38" y1="80" x2="62" y2="80" stroke-width="3" />
-                                <line x1="42" y1="70" x2="58" y2="70" stroke-width="3" />
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div class="candidate-row">
-                        <div class="sno">2</div>
-                        <div class="cand-info"><span>आदित्य</span><span>धनुष-बाण</span></div>
-                        <div class="cand-symbol-box" id="icon2">
-                            <svg viewBox="0 0 100 100" class="svg-icon">
-                                <path d="M30 15 Q80 50 30 85" stroke-width="5" />
-                                <line x1="30" y1="15" x2="30" y2="85" stroke-width="2" stroke-dasharray="4,4" />
-                                <line x1="10" y1="50" x2="75" y2="50" stroke-width="4" />
-                                <polygon points="75,45 90,50 75,55" fill="#000" stroke="none" />
-                                <line x1="10" y1="45" x2="15" y2="50" stroke-width="3" />
-                                <line x1="10" y1="55" x2="15" y2="50" stroke-width="3" />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="candidate-row">
-                        <div class="sno">3</div>
-                        <div class="cand-info"><span>NOTA</span><span>कोई नहीं</span></div>
-                        <div class="cand-symbol-box" id="icon3">
-                            <svg viewBox="0 0 100 100" class="svg-icon">
-                                <circle cx="50" cy="50" r="35" stroke-width="5" />
-                                <line x1="25" y1="25" x2="75" y2="75" stroke-width="5" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="control-panel">
-                    <div class="control-row"><div class="lamp" id="lamp1"></div><div class="vote-btn" onclick="processVote(1, 'Pari (Jag)', 'परी')"></div></div>
-                    <div class="control-row"><div class="lamp" id="lamp2"></div><div class="vote-btn" onclick="processVote(2, 'Aditya (Dhanush-Baan)', 'आदित्य')"></div></div>
-                    <div class="control-row"><div class="lamp" id="lamp3"></div><div class="vote-btn" onclick="processVote(3, 'NOTA', 'NOTA')"></div></div>
+        <div class="vvpat-cabinet">
+            <div class="vvpat-window">
+                <div class="vvpat-shatter"></div>
+                <div class="ballot-slip" id="vvpatChamberSlip">
+                    <h4 id="targetSlipName">Candidate</h4>
+                    <div class="svg-wrap" id="targetSlipIcon"></div>
                 </div>
             </div>
         </div>
+
+        <div class="ballot-chassis">
+            <div class="power-bulb" id="mainStatusBulb"></div>
+            
+            <div class="ballot-sheet">
+                
+                <div class="ballot-stripe">
+                    <div class="stripe-idx">1</div>
+                    <div class="meta-container">
+                        <div class="candidate-title">परी</div>
+                        <div class="symbol-title">चुनाव चिन्ह: जग (JUG)</div>
+                    </div>
+                    <div class="drawn-symbol" id="sketch1">
+                        <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <ellipse cx="50" cy="20" rx="14" ry="5"/>
+                            <path d="M36 20 C22 40, 20 82, 34 88 L66 88 C80 82, 78 40, 64 20"/>
+                            <path d="M64 35 C82 28, 88 52, 72 65"/>
+                            <path d="M34 45 C38 48, 62 48, 66 45 M33 60 C40 64, 60 64, 67 60 M34 74 L66 74"/>
+                        </svg>
+                    </div>
+                    <div class="interact-zone">
+                        <div class="voter-bulb" id="bulbRow1"></div>
+                        <button class="actuator-btn" onclick="executeBallotVote(1, 'Pari (Jag)', 'परी')"></button>
+                    </div>
+                </div>
+
+                <div class="ballot-stripe">
+                    <div class="stripe-idx">2</div>
+                    <div class="meta-container">
+                        <div class="candidate-title">आदित्य</div>
+                        <div class="symbol-title">चुनाव चिन्ह: धनुष-बाण</div>
+                    </div>
+                    <div class="drawn-symbol" id="sketch2">
+                        <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M28 12 Q82 50 28 88" stroke-width="4.5"/>
+                            <line x1="28" y1="12" x2="28" y2="88" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            <line x1="8" y1="50" x2="78" y2="50" stroke-width="3.5"/>
+                            <path d="M66 44 L80 50 L66 56 Z" fill="#1a1a1a"/>
+                            <path d="M8 44 L14 50 L8 56 M12 42 L18 50 L12 58"/>
+                        </svg>
+                    </div>
+                    <div class="interact-zone">
+                        <div class="voter-bulb" id="bulbRow2"></div>
+                        <button class="actuator-btn" onclick="executeBallotVote(2, 'Aditya (Dhanush-Baan)', 'आदित्य')"></button>
+                    </div>
+                </div>
+
+                <div class="ballot-stripe">
+                    <div class="stripe-idx">3</div>
+                    <div class="meta-container">
+                        <div class="candidate-title">NOTA</div>
+                        <div class="symbol-title">इनमें से कोई नहीं</div>
+                    </div>
+                    <div class="drawn-symbol" id="sketch3">
+                        <svg viewBox="0 0 100 100" fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="50" cy="50" r="32"/>
+                            <line x1="27" y1="27" x2="73" y2="73" stroke-width="5"/>
+                        </svg>
+                    </div>
+                    <div class="interact-zone">
+                        <div class="voter-bulb" id="bulbRow3"></div>
+                        <button class="actuator-btn" onclick="executeBallotVote(3, 'NOTA', 'NOTA')"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="terminationModal">
+        <div class="check-matrix">&#10004;</div>
+        <div class="term-heading">मतदान सफलतापूर्वक दर्ज हुआ</div>
     </div>
 
     <script>
-        // BACKEND API LINK
-        const API_URL = "https://script.google.com/macros/s/AKfycbxugfzqkxJm6YhUsKWJXvXH3q2q3XUoZwnqz-D5Kc_fDxLLTNJ9RA5xFyqJAcI85_D_/exec";
+        // BACKEND DEPLOYED LIVE API CONTEXT
+        const LIVE_API = "https://script.google.com/macros/s/AKfycbw3TAXkbi_pwgnN6k31XwGF18RS6M7LvQ4AaYrFbeAeBWScNlDgme-rnPeyg26hcZsEiQ/exec";
         
-        let currentVoterId = "";
-        let isVoting = false;
-        let idleTimer;
+        let activeVoterHash = "";
+        let isProcessing = false;
+        let supportTimer;
 
-        // 1. ADVANCED HINDI VOICE ENGINE
-        function speakHindi(text, onSpeechEndCallback = null) {
+        // Core Audio Node Controllers
+        function vocalizeEngine(phrase, completionHook = null) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Stop current speech
-                let utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'hi-IN'; // Pure Hindi
-                utterance.rate = 0.95;    // Professional speed
-                utterance.volume = 1;
-                
-                if (onSpeechEndCallback) {
-                    utterance.onend = onSpeechEndCallback;
-                }
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(phrase);
+                utterance.lang = 'hi-IN'; utterance.rate = 0.95; utterance.volume = 1;
+                if(completionHook) utterance.onend = completionHook;
                 window.speechSynthesis.speak(utterance);
             }
         }
 
-        // 2. HARDWARE SOUND EFFECTS (Web Audio API)
-        function playEVMBeep() {
-            let actx = new (window.AudioContext || window.webkitAudioContext)();
-            let osc = actx.createOscillator();
-            let gain = actx.createGain();
-            osc.type = 'sine'; 
-            osc.frequency.setValueAtTime(1400, actx.currentTime); // High pitched real EVM sound
-            gain.gain.setValueAtTime(1, actx.currentTime);
-            osc.connect(gain); gain.connect(actx.destination);
-            osc.start(); setTimeout(() => osc.stop(), 2000); // Sharp 2 seconds
+        function triggerSonarBeep() {
+            let ctx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = ctx.createOscillator(); let volume = ctx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(1450, ctx.currentTime);
+            volume.gain.setValueAtTime(1, ctx.currentTime);
+            osc.connect(volume); volume.connect(ctx.destination);
+            osc.start(); setTimeout(() => osc.stop(), 2000);
         }
 
-        function playPrinterSound() {
-            let actx = new (window.AudioContext || window.webkitAudioContext)();
-            let osc = actx.createOscillator();
-            let gain = actx.createGain();
-            osc.type = 'sawtooth'; // Mechanical grr-grr sound
-            osc.frequency.setValueAtTime(40, actx.currentTime);
-            gain.gain.setValueAtTime(0.4, actx.currentTime);
-            osc.connect(gain); gain.connect(actx.destination);
-            osc.start(); setTimeout(() => osc.stop(), 1500); // Rolls for 1.5s
+        function triggerMechanicalPrint() {
+            let ctx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = ctx.createOscillator(); let volume = ctx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(45, ctx.currentTime);
+            volume.gain.setValueAtTime(0.25, ctx.currentTime);
+            osc.connect(volume); volume.connect(ctx.destination);
+            osc.start(); setTimeout(() => osc.stop(), 1400);
         }
 
-        // 3. IDLE TIMER LOGIC (Election Commissioner Vishal)
-        function startIdleTimer() {
-            clearTimeout(idleTimer);
-            if (!isVoting) {
-                // Wait exactly 2 seconds after the welcome speech finishes
-                idleTimer = setTimeout(() => {
-                    speakHindi("कृपया किसी भी सहायता के लिए, इलेक्शन कमिश्नर विशाल से संपर्क करें।");
-                }, 2000); 
+        function initiateSupportAlert() {
+            clearTimeout(supportTimer);
+            if (!isProcessing) {
+                supportTimer = setTimeout(() => {
+                    vocalizeEngine("कृपया किसी भी सहायता के लिए इलेक्शन कमिश्नर विशाल से संपर्क करें।");
+                }, 2000);
             }
         }
 
-        // 4. LOGIN & AUTHENTICATION
-        function authenticateVoter() {
-            let idInput = document.getElementById("voterIdInput").value.trim();
-            let errDiv = document.getElementById("loginError");
+        // Authentication Framework
+        function fireAuthentication() {
+            let digitSequence = document.getElementById("voterNumField").value.trim();
+            let errorConsole = document.getElementById("authError");
+            let laser = document.getElementById("laserLine");
             
-            if (idInput.length !== 3 || isNaN(idInput)) { 
-                errDiv.innerText = "त्रुटि: केवल 3 अंकों की ID मान्य है!"; 
+            if (digitSequence.length !== 4 || isNaN(digitSequence)) { 
+                errorConsole.style.color = "#f87171";
+                errorConsole.innerText = "त्रुटि: केवल 4 अंकों की संख्या मान्य है!"; 
+                vocalizeEngine("कृपया सही आई डी दर्ज करें।");
                 return; 
             }
             
-            errDiv.innerText = "डेटाबेस से प्रमाणित किया जा रहा है...";
-            errDiv.style.color = "#1f4e78";
-            
-            // Connect to Google Sheet API
-            fetch(API_URL, {
+            activeVoterHash = "HP-" + digitSequence; 
+            errorConsole.style.color = "#38bdf8";
+            errorConsole.innerText = "डेटाबेस सत्यापन जारी है...";
+            laser.classList.add("scan-active");
+
+            // Direct Post to the User's Real Google Apps Script
+            fetch(LIVE_API, {
                 method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: "verify", voterId: idInput })
+                body: JSON.stringify({ action: "verify", voterId: activeVoterHash })
             }).then(() => {
-                currentVoterId = idInput;
-                isVoting = false;
-                
-                // Screen Transition
-                document.getElementById("loginScreen").classList.remove("active");
-                document.getElementById("evmSystem").classList.add("active");
-                
-                // Turn on Green Ready Light
-                setTimeout(() => { document.getElementById("evmReadyLight").classList.add("glow"); }, 500);
-                
-                // Speak and then start timer
-                speakHindi("स्वागत है। कृपया अपने पसंदीदा कैंडिडेट के सामने वाला नीला बटन दबाएं।", startIdleTimer);
-                
-            }).catch(() => {
-                errDiv.style.color = "#c0392b";
-                errDiv.innerText = "सर्वर कनेक्शन विफल!";
-            });
-        }
-
-        // 5. CASTING VOTE & VVPAT ANIMATION
-        function processVote(rowNum, candidateData, candidateHindiName) {
-            if(isVoting) return; // Prevent double pressing
-            isVoting = true;
-            
-            // Stop timers and speech immediately
-            clearTimeout(idleTimer); 
-            window.speechSynthesis.cancel(); 
-
-            // Turn off Ready Light, Turn on Red Bulb
-            document.getElementById("evmReadyLight").classList.remove("glow");
-            document.getElementById("lamp" + rowNum).classList.add("active");
-            
-            // Play physical sounds
-            playEVMBeep();
-            setTimeout(playPrinterSound, 100);
-
-            // Fetch correct SVG icon for slip
-            let iconHtml = document.getElementById("icon" + rowNum).innerHTML;
-            
-            // VVPAT Scroll Animation
-            let slip = document.getElementById("vvpatSlip");
-            document.getElementById("slipName").innerText = candidateHindiName;
-            document.getElementById("slipIconBox").innerHTML = iconHtml;
-            
-            // Roll down
-            slip.style.transition = "top 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)";
-            slip.style.top = "20px"; 
-
-            // Send Data to Google Sheets
-            let payloadId = (currentVoterId === "667") ? "667-" + Date.now() : currentVoterId;
-            let payload = { action: "vote", voterId: payloadId, candidate: candidateData };
-
-            fetch(API_URL, {
-                method: 'POST', mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify(payload)
-            }).then(() => {
-                
                 setTimeout(() => {
-                    // After 3 seconds of viewing, the paper cuts and falls down
-                    slip.style.transition = "top 0.5s ease-in";
-                    slip.style.top = "250px"; 
-                    
+                    document.getElementById("loginScreen").style.opacity = "0";
                     setTimeout(() => {
-                        // Thank you Voice & Reset
-                        speakHindi("वोट देने के लिए धन्यवाद।", () => {
-                            // Turn off red lamp
-                            document.getElementById("lamp" + rowNum).classList.remove("active");
-                            
-                            // Reset paper position silently
-                            slip.style.transition = "none"; 
-                            slip.style.top = "-160px";
-                            
-                            // Go back to login screen
-                            document.getElementById("evmSystem").classList.remove("active");
-                            document.getElementById("loginScreen").classList.add("active");
-                            document.getElementById("voterIdInput").value = "";
-                            document.getElementById("loginError").innerText = "";
-                        });
-                    }, 500); // Time taken to fall
-                }, 3000); // 3 Seconds hold time for VVPAT viewing
+                        document.getElementById("loginScreen").style.display = "none";
+                        document.getElementById("evmSystem").style.display = "flex";
+                        document.getElementById("mainStatusBulb").classList.add("power-active");
+                        isProcessing = false;
+                        
+                        vocalizeEngine("स्वागत है। अपना वोट डालने के लिए नीले बटन को दबाएं।", initiateSupportAlert);
+                    }, 400);
+                }, 700);
+            }).catch(() => { 
+                errorConsole.style.color = "#f87171"; 
+                errorConsole.innerText = "सत्यापन विफल! कृपया नेटवर्क जांचें।"; 
+                laser.classList.remove("scan-active"); 
+                vocalizeEngine("कृपया सही आई डी दर्ज करें।");
             });
         }
-    </script>
-</body>
-                                                 </html>
-    
+
+        // Vote Lifecycle Operation
+        function executeBallotVote(matrixRow, candidateString, candidateHindi) {
+            if(isProcessing) return;
+            isProcessing = true;
+            clearTimeout(supportTimer); window.speechSynthesis.cancel();
+            
+            // Hardware Visual Trigger State
+            document.getElementById("mainStatusBulb").classList.remove("power-active");
+            document.getElementById("bulbRow" + matrixRow).classList.add("trigger");
+            document.querySelector(`.ballot-stripe:nth-child(${matrixRow}) .actuator-btn`).classList.add("pressed");
+            document.getElementById("lcdConsole").inne
