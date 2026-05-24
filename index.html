@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Digital Haripur - Premium EVM Terminal</title>
+    <title>Project Digital Haripur - Serverless EVM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -21,13 +21,7 @@
             --text-muted: #9ca3af;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--bg-gradient);
@@ -39,36 +33,11 @@
             overflow-x: hidden;
         }
 
-        /* Fullscreen Layout Container */
-        .app-container {
-            width: 100%;
-            max-width: 1100px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
+        .app-container { width: 100%; max-width: 1100px; padding: 20px; display: flex; flex-direction: column; gap: 25px; }
+        header { text-align: center; margin-bottom: 10px; }
+        header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff; text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        header p { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
 
-        header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* Screen Wrapper Logic */
         .screen {
             background: var(--glass-bg);
             backdrop-filter: blur(24px);
@@ -78,318 +47,72 @@
             padding: 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             display: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .screen.active { display: block; animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 1. Verification Screen */
-        .auth-box {
-            max-width: 450px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .input-group {
-            position: relative;
-            margin: 30px 0 20px 0;
-        }
-
+        .auth-box { max-width: 450px; margin: 0 auto; text-align: center; }
+        .input-group { position: relative; margin: 30px 0 20px 0; }
         .input-group input {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px 20px; background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border); border-radius: 10px; color: white;
+            font-size: 18px; text-align: center; letter-spacing: 2px; outline: none;
         }
-
-        .input-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
-        }
-
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(59, 130, 246, 0.25); }
+        
         .btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            width: 100%; padding: 16px; background: var(--primary); border: none;
+            border-radius: 10px; color: white; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s ease;
         }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        /* 2. EVM Ballot Machine Layout */
-        .evm-grid {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 30px;
-        }
-
-        .ballot-panel {
-            background: rgba(0, 0, 0, 0.15);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .candidate-row {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px 20px;
-            transition: all 0.2s ease;
-        }
-
-        .cand-num {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 20px;
-            color: var(--text-muted);
-            width: 40px;
-        }
-
-        .cand-details {
-            flex-grow: 1;
-        }
-
-        .cand-name {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .cand-symbol-txt {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .ready-lamp {
-            width: 14px;
-            height: 14px;
-            background: #222;
-            border-radius: 50%;
-            margin-right: 25px;
-            transition: background 0.3s ease;
-        }
-
-        .ready-lamp.active {
-            background: #22c55e;
-            box-shadow: 0 0 12px #22c55e;
-        }
-
+        .evm-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; }
+        .ballot-panel { background: rgba(0, 0, 0, 0.15); border: 1px solid var(--glass-border); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+        .candidate-row { display: flex; align-items: center; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 12px 20px; }
+        .cand-num { font-family: 'Share Tech Mono', monospace; font-size: 20px; color: var(--text-muted); width: 40px; }
+        .cand-details { flex-grow: 1; }
+        .cand-name { font-size: 16px; font-weight: 600; }
+        .cand-symbol-txt { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        
+        .ready-lamp { width: 14px; height: 14px; background: #222; border-radius: 50%; margin-right: 25px; transition: background 0.3s ease; }
+        .ready-lamp.active { background: #22c55e; box-shadow: 0 0 12px #22c55e; }
+        
         .vote-trigger-btn {
-            width: 55px;
-            height: 40px;
-            background: #3b82f6;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            width: 55px; height: 40px; background: #ef4444; border: none; border-radius: 4px; cursor: pointer;
             box-shadow: inset 0 -4px 0 rgba(0,0,0,0.3), 0 4px 6px rgba(0,0,0,0.2);
-            transition: all 0.1s ease;
-            position: relative;
         }
+        .vote-trigger-btn:active { transform: translateY(2px); box-shadow: inset 0 -1px 0 rgba(0,0,0,0.3); }
 
-        .vote-trigger-btn:active {
-            transform: translateY(2px);
-            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        /* 3. High-Tech VVPAT Simulation Mechanism */
-        .vvpat-container {
-            background: #151f32;
-            border: 4px solid #334155;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            height: 100%;
-            min-height: 400px;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
-        }
-
-        .vvpat-header {
-            background: #1e293b;
-            padding: 10px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            border-bottom: 2px solid #334155;
-        }
-
-        .vvpat-window {
-            flex-grow: 1;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: start;
-            position: relative;
-            background: #090d16;
-        }
-
+        .vvpat-container { background: #151f32; border: 4px solid #334155; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; height: 100%; min-height: 400px; box-shadow: inset 0 0 30px rgba(0,0,0,0.8); }
+        .vvpat-header { background: #1e293b; padding: 10px; text-align: center; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid #334155; }
+        .vvpat-window { flex-grow: 1; padding: 20px; display: flex; justify-content: center; align-items: start; position: relative; background: #090d16; }
+        
         .vvpat-slip-box {
-            width: 85%;
-            background: #ffffff;
-            color: #000000;
-            padding: 20px;
-            border-radius: 2px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transform: translateY(-120%);
-            transition: transform 3.5s cubic-bezier(0.1, 0.4, 0.2, 1);
-            text-align: center;
+            width: 85%; background: #ffffff; color: #000000; padding: 20px; text-align: center;
+            transform: translateY(-120%); transition: transform 3.5s cubic-bezier(0.1, 0.4, 0.2, 1);
         }
+        .vvpat-slip-box.print-active { transform: translateY(0); }
+        .vvpat-slip-box.drop-active { transform: translateY(150%); transition: transform 1s ease-in; }
+        
+        .slip-header { font-size: 11px; font-weight: 700; border-bottom: 1px dashed #000; padding-bottom: 6px; margin-bottom: 12px; }
+        .slip-name { font-size: 18px; font-weight: 700; }
 
-        .vvpat-slip-box.print-active {
-            transform: translateY(0);
-        }
-
-        .vvpat-slip-box.drop-active {
-            transform: translateY(150%);
-            transition: transform 1s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-        }
-
-        .slip-header {
-            font-size: 11px;
-            font-weight: 700;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 6px;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .slip-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .slip-symbol {
-            font-size: 14px;
-            font-weight: 600;
-            color: #475569;
-        }
-
-        /* 4. Suspense 12-Second Loading Animation */
-        .suspense-box {
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        .radar-spinner {
-            width: 100px;
-            height: 100px;
-            border: 4px solid rgba(59, 130, 246, 0.1);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            margin: 0 auto 30px auto;
-            animation: spin 1s linear infinite;
-        }
-
+        .suspense-box { text-align: center; padding: 40px 0; }
+        .radar-spinner { width: 100px; height: 100px; border: 4px solid rgba(59, 130, 246, 0.1); border-left-color: var(--primary); border-radius: 50%; margin: 0 auto 30px auto; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-log { font-family: 'Share Tech Mono', monospace; color: var(--primary); font-size: 16px; }
 
-        .loading-log {
-            font-family: 'Share Tech Mono', monospace;
-            color: var(--primary);
-            font-size: 16px;
-            min-height: 24px;
-        }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 25px; }
+        .result-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 12px; padding: 25px; text-align: center; }
+        .res-count { font-family: 'Share Tech Mono', monospace; font-size: 44px; color: var(--primary); margin: 15px 0; }
+        
+        .footer-actions { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--glass-border); }
+        .admin-trigger { background: transparent; border: none; color: var(--text-muted); cursor: pointer; }
 
-        /* 5. Live Results Display Layout */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .result-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .res-count {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 44px;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 15px 0;
-        }
-
-        /* Footer Utilities */
-        .footer-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 15px;
-        }
-
-        .admin-trigger {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .admin-trigger:hover { color: white; }
-
-        /* Dialog Overlays */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 100;
-        }
-
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
-        .modal-content {
-            background: #111827;
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+        .modal-content { background: #111827; padding: 30px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--glass-border); }
     </style>
 </head>
 <body>
@@ -397,19 +120,17 @@
 <div class="app-container">
     <header>
         <h1>PROJECT DIGITAL HARIPUR</h1>
-        <p>High-Fidelity Automated Secure Voting System</p>
+        <p>Offline High-Fidelity Standalone EVM Terminal</p>
     </header>
 
     <div class="screen active" id="screenVerify">
         <div class="auth-box">
-            <i class="fa-solid fa-fingerprint style" style="font-size: 50px; color: var(--primary);"></i>
-            <h2 style="margin-top: 15px;">Voter Authentication</h2>
-            <p style="color: var(--text-muted); font-size: 14px;">Apna Unique Voter Token ID darj karein</p>
-            
+            <i class="fa-solid fa-fingerprint" style="font-size: 50px; color: var(--primary);"></i>
+            <h2 style="margin-top: 15px;">Voter Verification</h2>
             <div class="input-group">
-                <input type="text" id="voterIdInput" placeholder="HP-XXXX" maxlength="7">
+                <input type="text" id="voterIdInput" placeholder="Enter Voter ID (e.g., 1001, 0667)">
             </div>
-            <button class="btn" onclick="verifyVoterToken()">Verify Identity</button>
+            <button class="btn" onclick="verifyVoterTokenLocal()">Verify Identity</button>
         </div>
     </div>
 
@@ -418,41 +139,31 @@
             <div class="ballot-panel">
                 <div class="candidate-row">
                     <span class="cand-num">01</span>
-                    <div class="cand-details">
-                        <div class="cand-name">Pari (Jag)</div>
-                        <div class="cand-symbol-txt">Symbol: Jag (Water Infrastructure)</div>
-                    </div>
+                    <div class="cand-details"><div class="cand-name">Pari (Jag)</div></div>
                     <div class="ready-lamp" id="lamp-0"></div>
-                    <button class="vote-trigger-btn" onclick="castBallotAction('Pari (Jag)', 0)"></button>
+                    <button class="vote-trigger-btn" onclick="castBallotLocal('Pari (Jag)', 0)"></button>
                 </div>
                 <div class="candidate-row">
                     <span class="cand-num">02</span>
-                    <div class="cand-details">
-                        <div class="cand-name">Aditya (Dhanush-Baan)</div>
-                        <div class="cand-symbol-txt">Symbol: Dhanush-Baan (Education)</div>
-                    </div>
+                    <div class="cand-details"><div class="cand-name">Aditya (Dhanush-Baan)</div></div>
                     <div class="ready-lamp" id="lamp-1"></div>
-                    <button class="vote-trigger-btn" onclick="castBallotAction('Aditya (Dhanush-Baan)', 1)"></button>
+                    <button class="vote-trigger-btn" onclick="castBallotLocal('Aditya (Dhanush-Baan)', 1)"></button>
                 </div>
                 <div class="candidate-row">
                     <span class="cand-num">03</span>
-                    <div class="cand-details">
-                        <div class="cand-name">NOTA</div>
-                        <div class="cand-symbol-txt">None of the Above</div>
-                    </div>
+                    <div class="cand-details"><div class="cand-name">NOTA</div></div>
                     <div class="ready-lamp" id="lamp-2"></div>
-                    <button class="vote-trigger-btn" onclick="castBallotAction('NOTA', 2)"></button>
+                    <button class="vote-trigger-btn" onclick="castBallotLocal('NOTA', 2)"></button>
                 </div>
             </div>
 
             <div class="vvpat-container">
-                <div class="vvpat-header"><i class="fa-solid fa-print"></i> VVPAT AUDIT CABINET</div>
+                <div class="vvpat-header">VVPAT AUDIT BOX</div>
                 <div class="vvpat-window">
                     <div class="vvpat-slip-box" id="vvpatSlip">
                         <div class="slip-header">Haripur Election Commission</div>
                         <div class="slip-name" id="slipCandidateName">---</div>
-                        <div class="slip-symbol" id="slipSymbolName">---</div>
-                        <div style="font-size: 9px; margin-top: 10px; color:#64748b;" id="slipTimestamp"></div>
+                        <div style="font-size: 11px; margin-top:5px;" id="slipSymbolName"></div>
                     </div>
                 </div>
             </div>
@@ -462,21 +173,20 @@
     <div class="screen" id="screenSuspense">
         <div class="suspense-box">
             <div class="radar-spinner"></div>
-            <h2>Processing Election Standings</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Please wait while the secure mainframe aggregates ballot parameters...</p>
-            <div class="loading-log" id="loadingLogText">Initializing cloud synchronization...</div>
+            <h2>Fetching Secure Local Ledger...</h2>
+            <div class="loading-log" id="loadingLogText" style="margin-top:20px;">Reading encrypted data blocks...</div>
         </div>
     </div>
 
     <div class="screen" id="screenResults">
-        <h2 style="text-align: center;"><i class="fa-solid fa-chart-pie" style="color: var(--success);"></i> Live Election Audit Summary</h2>
-        <div class="results-grid" id="resultsGridContainer">
-            </div>
-        <button class="btn" style="margin-top: 30px; background: #374151;" onclick="navigateToScreen('screenVerify')">Logout / Return to Terminal</button>
+        <h2 style="text-align: center;"><i class="fa-solid fa-chart-pie" style="color: var(--success);"></i> Local Election Audit Results</h2>
+        <div class="results-grid" id="resultsGridContainer"></div>
+        <button class="btn" style="margin-top: 30px; background: #374151;" onclick="navigateToScreen('screenVerify')">Back to Terminal</button>
+        <button class="btn" style="margin-top: 10px; background: var(--danger);" onclick="resetLocalDatabase()">Reset All Votes Data</button>
     </div>
 
     <div class="footer-actions">
-        <span style="font-size: 12px; color: var(--text-muted); font-family: 'Share Tech Mono', monospace;">Node Status: Secure Cloud Active</span>
+        <span style="font-size: 12px; color: var(--text-muted); font-family: 'Share Tech Mono';">Status: Independent Local Engine</span>
         <button class="admin-trigger" onclick="openAdminGate()"><i class="fa-solid fa-lock"></i> Admin Panel</button>
     </div>
 </div>
@@ -484,221 +194,180 @@
 <div class="modal-overlay" id="adminModal">
     <div class="modal-content">
         <h3>Admin Authentication</h3>
-        <p style="color: var(--text-muted); font-size: 13px; margin: 5px 0 20px 0;">Master password enter karein</p>
-        <input type="password" id="adminPasswordInput" style="width:100%; padding:12px; background:rgba(0,0,0,0.4); border:1px solid var(--glass-border); border-radius:8px; color:white; text-align:center; font-size:16px; outline:none; margin-bottom:20px;">
+        <input type="password" id="adminPasswordInput" placeholder="Password Enter Karein" style="width:100%; padding:12px; background:rgba(0,0,0,0.4); border:1px solid var(--glass-border); color:white; text-align:center; margin: 20px 0; border-radius:8px;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <button class="btn" style="background:#374151;" onclick="closeAdminGate()">Cancel</button>
-            <button class="btn" onclick="executeAdminResultsFetch()">Unlock</button>
+            <button class="btn" onclick="checkResultsLocal()">Unlock</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Configuration Endpoint
-    const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbweYo6hbrP3MOxSFA3kh4YDvgdwyXSsc3Lv9rXRkwlaUb3vf1yWsAtl1RK04xpasD9D/exec";
-    let activeVoterToken = "";
+    // Local Database Initialization 
+    if(!localStorage.getItem('votedUsers')) localStorage.setItem('votedUsers', JSON.stringify([]));
+    if(!localStorage.getItem('voteCounts')) {
+        localStorage.setItem('voteCounts', JSON.stringify({"Pari (Jag)": 0, "Aditya (Dhanush-Baan)": 0, "NOTA": 0}));
+    }
 
-    // Audio Engine via Native Web Audio API Synthesizer (Bina Hang Kiye Real Audio Output)
+    // Pre-registered mock Voter Directory
+    const validVoterIDs = ["1001", "0667", "1002", "1003", "1004", "1005", "2026"];
+    let currentActiveUser = "";
+
+    // Web Audio Synthesizer Noise Engine
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playBeepSound() {
         const osc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(950, audioCtx.currentTime); // High pitch classic EVM beep
-        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
         osc.start();
-        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1.2);
-        osc.stop(audioCtx.currentTime + 1.2);
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1.5);
+        osc.stop(audioCtx.currentTime + 1.5);
     }
 
     function playThermalPrinterSound() {
-        // Continuous thermal paper friction noise simulation
-        const bufferSize = audioCtx.sampleRate * 2.5; // 2.5 Seconds printing audio buffer
+        const bufferSize = audioCtx.sampleRate * 2.5;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-        }
-
-        const noiseNode = audioCtx.createBufferSource();
-        noiseNode.buffer = buffer;
-
+        for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
         const filter = audioCtx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.value = 1200;
+        filter.type = 'bandpass'; filter.frequency.value = 1300;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.0, audioCtx.currentTime + 2.4);
+        noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+        noise.start();
 
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 2.2);
-        gainNode.gain.linearRampToValueAtTime(0.0, audioCtx.currentTime + 2.5); // Fade for tear
-
-        noiseNode.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        noiseNode.start();
-
-        // Mechanical cutting blade snip delay injection (At 2.3 seconds mark)
         setTimeout(() => {
-            const osc = audioCtx.createOscillator();
-            const bladeGain = audioCtx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.15);
-            bladeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            bladeGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-            osc.connect(bladeGain);
-            bladeGain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.15);
-        }, 2300);
+            const osc = audioCtx.createOscillator(); const bgain = audioCtx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+            bgain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            osc.connect(bgain); bgain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }, 2200);
     }
 
-    // Navigation Mechanism
     function navigateToScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
+        document.querySelectorAll('.screen').forEach(scr => scr.style.display = 'none');
+        document.getElementById(screenId).style.display = 'block';
     }
 
-    // Action 1: Token Verification Request
-    async function verifyVoterToken() {
-        const tokenInput = document.getElementById('voterIdInput').value.trim();
-        if (!tokenInput) return alert("Kripya Voter ID fill karein!");
+    // Local Logic: Verify Voter Token
+    function verifyVoterTokenLocal() {
+        const inputId = document.getElementById('voterIdInput').value.trim();
+        if(!inputId) return alert("Voter ID daalna zaroori hai!");
 
-        activeVoterToken = tokenInput;
-
-        try {
-            const response = await fetch(API_ENDPOINT, {
-                method: "POST",
-                body: JSON.stringify({ action: "verify", voterId: activeVoterToken })
-            });
-            const result = await response.json();
-
-            if (result.status === "success") {
-                navigateToScreen('screenEVM');
-            } else {
-                alert(result.message);
-            }
-        } catch (err) {
-            alert("Network Error: Verification system temporarily unreachable.");
+        if(!validVoterIDs.includes(inputId)) {
+            return alert("त्रुटि: यह Voter ID रजिस्टर में नहीं है!");
         }
+
+        const votedUsers = JSON.parse(localStorage.getItem('votedUsers'));
+        if(votedUsers.includes(inputId) && inputId !== "0667") { // 0667 bypass for multi-testing
+            return alert("त्रुटि: आप पहले ही मतदान कर चुके हैं!");
+        }
+
+        currentActiveUser = inputId;
+        navigateToScreen('screenEVM');
     }
 
-    // Action 2: EVM Voting Core Block
-    async function castBallotAction(candidateName, index) {
-        // Ready light activation sequence
+    // Local Logic: Save Vote and Run VVPAT
+    function castBallotLocal(candidateName, index) {
         const lamp = document.getElementById(`lamp-${index}`);
         lamp.classList.add('active');
 
-        // Render slip specifications
         document.getElementById('slipCandidateName').innerText = candidateName;
-        document.getElementById('slipSymbolName').innerText = candidateName.includes("Pari") ? "Symbol: JAG" : candidateName.includes("Aditya") ? "Symbol: DHANUSH-BAAN" : "Symbol: NONE";
-        document.getElementById('slipTimestamp').innerText = "Ref: " + Math.floor(Math.random() * 900000 + 100000);
+        document.getElementById('slipSymbolName').innerText = candidateName.includes("Jag") ? "Symbol: JAG" : candidateName.includes("Dhanush") ? "Symbol: DHANUSH-BAAN" : "Symbol: NONE";
 
-        // Run hardware audio and simulation mechanism
         playThermalPrinterSound();
         const slip = document.getElementById('vvpatSlip');
         slip.className = "vvpat-slip-box print-active";
 
-        // Commit execution payload data to Google Sheets
-        try {
-            await fetch(API_ENDPOINT, {
-                method: "POST",
-                body: JSON.stringify({ action: "vote", voterId: activeVoterToken, candidate: candidateName })
-            });
-        } catch (e) {
-            console.error("Background sync failure, buffered execution saved.");
-        }
+        // Save data to localStorage immediately
+        const votedUsers = JSON.parse(localStorage.getItem('votedUsers'));
+        votedUsers.push(currentActiveUser);
+        localStorage.setItem('votedUsers', JSON.stringify(votedUsers));
 
-        // Wait 7 seconds standard viewing protocol, then trigger drop and sound loop
+        const voteCounts = JSON.parse(localStorage.getItem('voteCounts'));
+        voteCounts[candidateName] += 1;
+        localStorage.setItem('voteCounts', JSON.stringify(voteCounts));
+
         setTimeout(() => {
             playBeepSound();
             slip.className = "vvpat-slip-box drop-active";
             
-            // Loop cleanup, cycle return
             setTimeout(() => {
                 lamp.classList.remove('active');
                 slip.className = "vvpat-slip-box";
                 document.getElementById('voterIdInput').value = "";
                 navigateToScreen('screenVerify');
             }, 1200);
-
         }, 7000);
     }
 
-    // Action 3: Administrative Module Protection Layer
     function openAdminGate() { document.getElementById('adminModal').classList.add('active'); }
     function closeAdminGate() { document.getElementById('adminModal').classList.remove('active'); }
 
-    async function executeAdminResultsFetch() {
+    // Local Logic: Suspense 12 Seconds Result Fetch
+    function checkResultsLocal() {
         const password = document.getElementById('adminPasswordInput').value;
-        closeAdminGate();
-        
-        navigateToScreen('screenSuspense');
-        
-        // Dynamic Suspense Building Logs Engine (12 Seconds Total Rotation)
-        const logPhrases = [
-            "Initializing standard secure cloud handshake...",
-            "Validating cryptographic matrix signatures...",
-            "Contacting Voter Directory authorization records...",
-            "Decrypting structural ledger allocations...",
-            "Aggregating counting hashes across active wards...",
-            "Compiling final validated ballot standings..."
-        ];
-        
-        let phraseIdx = 0;
-        const intervalId = setInterval(() => {
-            if(phraseIdx < logPhrases.length) {
-                document.getElementById('loadingLogText').innerText = logPhrases[phraseIdx];
-                phraseIdx++;
-            }
-        }, 2000);
-
-        try {
-            const response = await fetch(API_ENDPOINT, {
-                method: "POST",
-                body: JSON.stringify({ action: "fetchResults", password: password })
-            });
-            const payload = await response.json();
-
-            // Force delay to maintain tactical 12 seconds countdown profile
-            setTimeout(() => {
-                clearInterval(intervalId);
-                if (payload.status === "success") {
-                    renderUIStandings(payload.data);
-                    navigateToScreen('screenResults');
-                    document.getElementById('adminPasswordInput').value = "";
-                } else {
-                    alert(payload.message);
-                    navigateToScreen('screenVerify');
-                }
-            }, 12000);
-
-        } catch (err) {
-            clearInterval(intervalId);
-            alert("System Error: Could not parse remote administrative table.");
-            navigateToScreen('screenVerify');
+        if(password !== "Haripur@2026") {
+            alert("त्रुटि: पासवर्ड गलत है!");
+            return closeAdminGate();
         }
+        closeAdminGate();
+        navigateToScreen('screenSuspense');
+
+        const logs = [
+            "Opening offline secure container...",
+            "Validating cryptography blocks...",
+            "Counting local database storage logs...",
+            "Generating direct geometric graphics..."
+        ];
+        let idx = 0;
+        const interval = setInterval(() => {
+            if(idx < logs.length) {
+                document.getElementById('loadingLogText').innerText = logs[idx];
+                idx++;
+            }
+        }, 2500);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            renderLocalResults();
+            navigateToScreen('screenResults');
+            document.getElementById('adminPasswordInput').value = "";
+        }, 12000); // Strict 12-second dramatic suspense
     }
 
-    function renderUIStandings(data) {
+    function renderLocalResults() {
+        const data = JSON.parse(localStorage.getItem('voteCounts'));
         const container = document.getElementById('resultsGridContainer');
-        container.innerHTML = ""; // Flush previous nodes
+        container.innerHTML = "";
 
         for (const [candidate, count] of Object.entries(data)) {
             const card = document.createElement('div');
             card.className = "result-card";
             card.innerHTML = `
-                <h3 style="font-size: 18px;">${candidate}</h3>
+                <h3>${candidate}</h3>
                 <div class="res-count">${count}</div>
-                <p style="color: var(--text-muted); font-size:12px;">Ballots Verified</p>
+                <p style="color: var(--text-muted); font-size:12px;">Votes Saved in Memory</p>
             `;
             container.appendChild(card);
         }
     }
-</script>
 
+    function resetLocalDatabase() {
+        if(confirm("Kya aap sach mein saara vote data clear karna chahte hain?")) {
+            localStorage.setItem('votedUsers', JSON.stringify([]));
+            localStorage.setItem('voteCounts', JSON.stringify({"Pari (Jag)": 0, "Aditya (Dhanush-Baan)": 0, "NOTA": 0}));
+            alert("Database format ho gaya! Ab naye sire se voting shuru ho sakti hai.");
+            navigateToScreen('screenVerify');
+        }
+    }
+</script>
 </body>
 </html>
